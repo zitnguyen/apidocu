@@ -1,0 +1,1216 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LMS API Documentation</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: #f5f5f5;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: white;
+        padding: 40px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .title-page {
+        text-align: center;
+        page-break-after: always;
+        padding: 60px 0;
+        border-bottom: 3px solid #2563eb;
+        margin-bottom: 40px;
+      }
+
+      .title-page h1 {
+        font-size: 48px;
+        color: #2563eb;
+        margin-bottom: 20px;
+      }
+
+      .title-page .subtitle {
+        font-size: 24px;
+        color: #666;
+        margin-bottom: 40px;
+      }
+
+      .title-page .meta {
+        font-size: 14px;
+        color: #999;
+        margin-top: 60px;
+      }
+
+      h1 {
+        color: #2563eb;
+        font-size: 32px;
+        margin: 30px 0 20px 0;
+        border-bottom: 2px solid #2563eb;
+        padding-bottom: 10px;
+        page-break-after: avoid;
+      }
+
+      h2 {
+        color: #1e40af;
+        font-size: 24px;
+        margin: 25px 0 15px 0;
+        page-break-after: avoid;
+      }
+
+      h3 {
+        color: #1e40af;
+        font-size: 18px;
+        margin: 20px 0 10px 0;
+        page-break-after: avoid;
+      }
+
+      h4 {
+        color: #2563eb;
+        font-size: 16px;
+        margin: 15px 0 8px 0;
+      }
+
+      p {
+        margin: 10px 0;
+        text-align: justify;
+      }
+
+      code {
+        background: #f0f0f0;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-family: "Courier New", monospace;
+        color: #c7254e;
+      }
+
+      pre {
+        background: #282c34;
+        color: #abb2bf;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+        margin: 15px 0;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      pre code {
+        background: none;
+        padding: 0;
+        color: #abb2bf;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+
+      th {
+        background: #2563eb;
+        color: white;
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #ddd;
+      }
+
+      td {
+        padding: 12px;
+        border: 1px solid #ddd;
+      }
+
+      tr:nth-child(even) {
+        background: #f9f9f9;
+      }
+
+      tr:hover {
+        background: #f0f0f0;
+      }
+
+      ul,
+      ol {
+        margin: 15px 0 15px 30px;
+      }
+
+      li {
+        margin: 8px 0;
+      }
+
+      .endpoint {
+        background: #f8f9fa;
+        border-left: 4px solid #2563eb;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 3px;
+      }
+
+      .method-get {
+        color: #0066cc;
+        font-weight: bold;
+      }
+
+      .method-post {
+        color: #009900;
+        font-weight: bold;
+      }
+
+      .method-put {
+        color: #ff9900;
+        font-weight: bold;
+      }
+
+      .method-delete {
+        color: #cc0000;
+        font-weight: bold;
+      }
+
+      .method-patch {
+        color: #9933ff;
+        font-weight: bold;
+      }
+
+      .request-body,
+      .response {
+        background: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        padding: 15px;
+        margin: 10px 0;
+      }
+
+      .example {
+        background: #fffacd;
+        border: 1px solid #deb887;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 3px;
+      }
+
+      .warning {
+        background: #fff3cd;
+        border: 1px solid #ffc107;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 3px;
+        color: #856404;
+      }
+
+      .success {
+        background: #d4edda;
+        border: 1px solid #28a745;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 3px;
+        color: #155724;
+      }
+
+      .error {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 3px;
+        color: #721c24;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 3px;
+        font-size: 12px;
+        font-weight: bold;
+        margin-right: 5px;
+      }
+
+      .badge-auth {
+        background: #ff9800;
+        color: white;
+      }
+
+      .badge-admin {
+        background: #f44336;
+        color: white;
+      }
+
+      .badge-public {
+        background: #4caf50;
+        color: white;
+      }
+
+      .toc {
+        background: #f5f5f5;
+        padding: 20px;
+        border-radius: 5px;
+        margin: 20px 0;
+      }
+
+      .toc ul {
+        list-style-position: inside;
+      }
+
+      .toc a {
+        color: #2563eb;
+        text-decoration: none;
+      }
+
+      .toc a:hover {
+        text-decoration: underline;
+      }
+
+      .page-break {
+        page-break-after: always;
+      }
+
+      .section-header {
+        background: #2563eb;
+        color: white;
+        padding: 20px;
+        margin: 30px 0 20px 0;
+        border-radius: 5px;
+        page-break-after: avoid;
+      }
+
+      .section-header h2 {
+        color: white;
+        border: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      @media print {
+        body {
+          background: white;
+        }
+        .container {
+          max-width: 100%;
+          box-shadow: none;
+          padding: 0;
+        }
+        h1 {
+          page-break-after: avoid;
+        }
+        h2 {
+          page-break-after: avoid;
+        }
+        .page-break {
+          page-break-after: always;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Title Page -->
+      <div class="title-page">
+        <h1>🎓 LMS API Documentation</h1>
+        <div class="subtitle">
+          Learning Management System - Complete API Reference
+        </div>
+        <div class="meta">
+          <p><strong>Version:</strong> 1.0.0</p>
+          <p><strong>Last Updated:</strong> February 2026</p>
+          <p><strong>Project:</strong> BezChess LMS</p>
+        </div>
+      </div>
+
+      <!-- Table of Contents -->
+      <h1>📋 Table of Contents</h1>
+      <div class="toc">
+        <ul>
+          <li><a href="#introduction">Introduction</a></li>
+          <li><a href="#base-url">Base URL & Access</a></li>
+          <li><a href="#authentication">Authentication</a></li>
+          <li><a href="#response-format">Response Format</a></li>
+          <li><a href="#error-codes">Error Codes</a></li>
+          <li><a href="#auth-endpoints">Authentication Endpoints</a></li>
+          <li><a href="#user-endpoints">User Endpoints</a></li>
+          <li><a href="#course-endpoints">Course Endpoints</a></li>
+          <li><a href="#order-endpoints">Order Endpoints</a></li>
+          <li><a href="#enrollment-endpoints">Enrollment Endpoints</a></li>
+          <li><a href="#chapter-endpoints">Chapter Endpoints</a></li>
+          <li><a href="#lesson-endpoints">Lesson Endpoints</a></li>
+          <li><a href="#roles-permissions">Roles & Permissions</a></li>
+          <li><a href="#validation-rules">Validation Rules</a></li>
+        </ul>
+      </div>
+
+      <div class="page-break"></div>
+
+      <!-- Introduction -->
+      <h1 id="introduction">Introduction</h1>
+      <p>
+        This is the complete API documentation for the
+        <strong>Learning Management System (LMS)</strong>. The LMS API provides
+        comprehensive endpoints for managing courses, users, orders, and student
+        enrollments. The API is built with Express.js, MongoDB, and JWT
+        authentication.
+      </p>
+
+      <p><strong>Version:</strong> 1.0.0</p>
+      <p><strong>Documentation Date:</strong> February 2026</p>
+
+      <!-- Base URL & Access -->
+      <h1 id="base-url">Base URL & Access</h1>
+      <div class="endpoint">
+        <h3>API Base URL</h3>
+        <pre><code>http://localhost:5000/api</code></pre>
+      </div>
+
+      <div class="endpoint">
+        <h3>Interactive API Documentation (Swagger UI)</h3>
+        <pre><code>http://localhost:5000/api-docs</code></pre>
+      </div>
+
+      <!-- Authentication -->
+      <div class="page-break"></div>
+      <div class="section-header">
+        <h2>🔐 Authentication</h2>
+      </div>
+
+      <h3>JWT Bearer Token</h3>
+      <p>
+        All protected endpoints require a Bearer token in the Authorization
+        header:
+      </p>
+      <pre><code>Authorization: Bearer &lt;your_access_token&gt;</code></pre>
+
+      <h3>Getting Started</h3>
+      <ol>
+        <li>
+          Call the <strong>Sign Up</strong> endpoint to create an account or
+          <strong>Sign In</strong> to authenticate
+        </li>
+        <li>
+          Receive an <code>accessToken</code> (valid for 45 minutes) and
+          <code>refreshToken</code> (valid for 7 days)
+        </li>
+        <li>Use the <code>accessToken</code> for subsequent API calls</li>
+        <li>
+          When <code>accessToken</code> expires, use the
+          <strong>Refresh Token</strong> endpoint to get a new one
+        </li>
+      </ol>
+
+      <h3>Token Expiry</h3>
+      <table>
+        <tr>
+          <th>Token Type</th>
+          <th>Expiry Duration</th>
+          <th>Usage</th>
+        </tr>
+        <tr>
+          <td>Access Token</td>
+          <td>45 minutes</td>
+          <td>API requests</td>
+        </tr>
+        <tr>
+          <td>Refresh Token</td>
+          <td>7 days</td>
+          <td>Get new access token</td>
+        </tr>
+      </table>
+
+      <!-- Response Format -->
+      <div class="page-break"></div>
+      <h1 id="response-format">Response Format</h1>
+      <p>All API responses follow a consistent JSON format.</p>
+
+      <h3>Success Response</h3>
+      <div class="success">
+        <pre><code>{
+  "success": true,
+  "data": {
+    // Response data
+  },
+  "message": "Optional success message"
+}</code></pre>
+      </div>
+
+      <h3>Error Response</h3>
+      <div class="error">
+        <pre><code>{
+  "success": false,
+  "status": "fail",
+  "message": "Error description"
+}</code></pre>
+      </div>
+
+      <!-- Error Codes -->
+      <h1 id="error-codes">Error Codes</h1>
+      <table>
+        <tr>
+          <th>Code</th>
+          <th>Status</th>
+          <th>Meaning</th>
+          <th>Action</th>
+        </tr>
+        <tr>
+          <td>200</td>
+          <td>OK</td>
+          <td>Request succeeded</td>
+          <td>No action needed</td>
+        </tr>
+        <tr>
+          <td>201</td>
+          <td>Created</td>
+          <td>Resource created successfully</td>
+          <td>No action needed</td>
+        </tr>
+        <tr>
+          <td>400</td>
+          <td>Bad Request</td>
+          <td>Invalid request parameters</td>
+          <td>Check request body</td>
+        </tr>
+        <tr>
+          <td>401</td>
+          <td>Unauthorized</td>
+          <td>Missing or invalid token</td>
+          <td>Refresh token and retry</td>
+        </tr>
+        <tr>
+          <td>403</td>
+          <td>Forbidden</td>
+          <td>Insufficient permissions</td>
+          <td>Check user role</td>
+        </tr>
+        <tr>
+          <td>404</td>
+          <td>Not Found</td>
+          <td>Resource not found</td>
+          <td>Verify resource ID</td>
+        </tr>
+        <tr>
+          <td>409</td>
+          <td>Conflict</td>
+          <td>Resource already exists</td>
+          <td>Check for duplicates</td>
+        </tr>
+        <tr>
+          <td>500</td>
+          <td>Server Error</td>
+          <td>Internal server error</td>
+          <td>Retry with exponential backoff</td>
+        </tr>
+      </table>
+
+      <!-- Authentication Endpoints -->
+      <div class="page-break"></div>
+      <div class="section-header">
+        <h2 id="auth-endpoints">🔐 Authentication Endpoints</h2>
+      </div>
+
+      <h3>1. Sign Up</h3>
+      <div class="endpoint">
+        <p><span class="method-post">POST</span> <code>/auth/signup</code></p>
+        <p><span class="badge badge-public">PUBLIC</span></p>
+        <p>Register a new user account.</p>
+      </div>
+
+      <h4>Request Body</h4>
+      <div class="request-body">
+        <pre><code>{
+  "username": "john123",
+  "email": "john@example.com",
+  "phone": "0987654321",
+  "password": "SecurePass123",
+  "address": "123 Main St"
+}</code></pre>
+      </div>
+
+      <h4>Response (201 Created)</h4>
+      <div class="response">
+        <pre><code>{
+  "success": true,
+  "message": "Đăng ký thành công",
+  "data": {
+    "userId": "507f1f77bcf86cd799439011",
+    "username": "john123"
+  }
+}</code></pre>
+      </div>
+
+      <h3>2. Sign In</h3>
+      <div class="endpoint">
+        <p><span class="method-post">POST</span> <code>/auth/signin</code></p>
+        <p><span class="badge badge-public">PUBLIC</span></p>
+        <p>Authenticate user and receive tokens.</p>
+      </div>
+
+      <h4>Request Body</h4>
+      <div class="request-body">
+        <pre><code>{
+  "username": "john123",
+  "password": "SecurePass123"
+}</code></pre>
+      </div>
+
+      <h4>Response (200 OK)</h4>
+      <div class="response">
+        <pre><code>{
+  "success": true,
+  "data": {
+    "userId": "507f1f77bcf86cd799439011",
+    "username": "john123",
+    "role": "parent",
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+}</code></pre>
+      </div>
+
+      <h3>3. Refresh Token</h3>
+      <div class="endpoint">
+        <p><span class="method-post">POST</span> <code>/auth/refresh</code></p>
+        <p><span class="badge badge-public">PUBLIC</span></p>
+        <p>Get a new access token using refresh token.</p>
+      </div>
+
+      <h4>Response (200 OK)</h4>
+      <div class="response">
+        <pre><code>{
+  "success": true,
+  "data": {
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+}</code></pre>
+      </div>
+
+      <h3>4. Logout</h3>
+      <div class="endpoint">
+        <p><span class="method-post">POST</span> <code>/auth/logout</code></p>
+        <p><span class="badge badge-auth">REQUIRES AUTH</span></p>
+        <p>Invalidate the current refresh token.</p>
+      </div>
+
+      <h3>5. Logout All Devices</h3>
+      <div class="endpoint">
+        <p>
+          <span class="method-post">POST</span> <code>/auth/logout-all</code>
+        </p>
+        <p><span class="badge badge-auth">REQUIRES AUTH</span></p>
+        <p>Logout from all devices by invalidating all refresh tokens.</p>
+      </div>
+
+      <!-- User Endpoints -->
+      <div class="page-break"></div>
+      <div class="section-header">
+        <h2 id="user-endpoints">👤 User Endpoints</h2>
+      </div>
+
+      <h3>1. Get Current User Profile</h3>
+      <div class="endpoint">
+        <p><span class="method-get">GET</span> <code>/users/me</code></p>
+        <p><span class="badge badge-auth">REQUIRES AUTH</span></p>
+        <p>Get the logged-in user's profile information.</p>
+      </div>
+
+      <h4>Response (200 OK)</h4>
+      <div class="response">
+        <pre><code>{
+  "success": true,
+  "data": {
+    "_id": "507f1f77bcf86cd799439011",
+    "username": "john123",
+    "email": "john@example.com",
+    "phone": "0987654321",
+    "role": "parent",
+    "createdAt": "2024-01-15T10:30:00Z"
+  }
+}</code></pre>
+      </div>
+
+      <h3>2. Update User Profile</h3>
+      <div class="endpoint">
+        <p><span class="method-put">PUT</span> <code>/users/me</code></p>
+        <p><span class="badge badge-auth">REQUIRES AUTH</span></p>
+        <p>Update current user's profile information.</p>
+      </div>
+
+      <h4>Request Body</h4>
+      <div class="request-body">
+        <pre><code>{
+  "username": "john456",
+  "email": "newemail@example.com",
+  "phone": "0912345678"
+}</code></pre>
+      </div>
+
+      <h3>3. Change Password</h3>
+      <div class="endpoint">
+        <p>
+          <span class="method-post">POST</span>
+          <code>/users/change-password</code>
+        </p>
+        <p><span class="badge badge-auth">REQUIRES AUTH</span></p>
+        <p>Change the current user's password.</p>
+      </div>
+
+      <h4>Request Body</h4>
+      <div class="request-body">
+        <pre><code>{
+  "oldPassword": "OldPass123",
+  "newPassword": "NewPass456"
+}</code></pre>
+      </div>
+
+      <h3>4. Get Teachers List</h3>
+      <div class="endpoint">
+        <p><span class="method-get">GET</span> <code>/users/teachers</code></p>
+        <p><span class="badge badge-public">PUBLIC</span></p>
+        <p>Get list of all teachers.</p>
+      </div>
+
+      <h3>5. Create User (Admin Only)</h3>
+      <div class="endpoint">
+        <p><span class="method-post">POST</span> <code>/users</code></p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Create a new user account.</p>
+      </div>
+
+      <h3>6. Get All Users (Admin Only)</h3>
+      <div class="endpoint">
+        <p><span class="method-get">GET</span> <code>/users</code></p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Retrieve all users with optional filtering by role.</p>
+      </div>
+
+      <h3>7. Get User by ID (Admin Only)</h3>
+      <div class="endpoint">
+        <p><span class="method-get">GET</span> <code>/users/:id</code></p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Get a specific user by ID.</p>
+      </div>
+
+      <h3>8. Update User (Admin Only)</h3>
+      <div class="endpoint">
+        <p><span class="method-put">PUT</span> <code>/users/:id</code></p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Update any user's information.</p>
+      </div>
+
+      <h3>9. Delete User (Admin Only)</h3>
+      <div class="endpoint">
+        <p><span class="method-delete">DELETE</span> <code>/users/:id</code></p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Delete a user account.</p>
+      </div>
+
+      <!-- Course Endpoints -->
+      <div class="page-break"></div>
+      <div class="section-header">
+        <h2 id="course-endpoints">📚 Course Endpoints</h2>
+      </div>
+
+      <h3>1. Get All Courses</h3>
+      <div class="endpoint">
+        <p><span class="method-get">GET</span> <code>/courses</code></p>
+        <p><span class="badge badge-public">PUBLIC</span></p>
+        <p>Get list of published courses with filtering and pagination.</p>
+      </div>
+
+      <h4>Query Parameters</h4>
+      <ul>
+        <li><code>page</code> - Page number (default: 1)</li>
+        <li><code>limit</code> - Items per page (default: 10)</li>
+        <li>
+          <code>category</code> - Filter by category (Opening, Strategy,
+          Tactics, Endgame, General)
+        </li>
+        <li>
+          <code>level</code> - Filter by level (Beginner, Intermediate,
+          Advanced, All Levels)
+        </li>
+        <li><code>search</code> - Search by title</li>
+      </ul>
+
+      <h3>2. Get Course Details</h3>
+      <div class="endpoint">
+        <p><span class="method-get">GET</span> <code>/courses/:id</code></p>
+        <p><span class="badge badge-public">PUBLIC</span></p>
+        <p>Get full details of a specific course.</p>
+      </div>
+
+      <h3>3. Create Course (Admin Only)</h3>
+      <div class="endpoint">
+        <p><span class="method-post">POST</span> <code>/courses</code></p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Create a new course.</p>
+      </div>
+
+      <h4>Request Body</h4>
+      <div class="request-body">
+        <pre><code>{
+  "title": "Advanced Chess Tactics",
+  "description": "Master advanced tactical patterns",
+  "price": 149.99,
+  "salePrice": 119.99,
+  "level": "Advanced",
+  "category": "Tactics",
+  "thumbnail": "https://example.com/image.jpg",
+  "tags": ["tactics", "advanced"]
+}</code></pre>
+      </div>
+
+      <h3>4. Get Managed Courses (Admin Only)</h3>
+      <div class="endpoint">
+        <p>
+          <span class="method-get">GET</span>
+          <code>/courses/managed-courses</code>
+        </p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Get all courses managed by the current admin.</p>
+      </div>
+
+      <h3>5. Update Course (Admin Only)</h3>
+      <div class="endpoint">
+        <p><span class="method-put">PUT</span> <code>/courses/:id</code></p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Update course information.</p>
+      </div>
+
+      <h3>6. Delete Course (Admin Only)</h3>
+      <div class="endpoint">
+        <p>
+          <span class="method-delete">DELETE</span> <code>/courses/:id</code>
+        </p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Delete a course (soft delete).</p>
+      </div>
+
+      <!-- Order Endpoints -->
+      <div class="page-break"></div>
+      <div class="section-header">
+        <h2 id="order-endpoints">💳 Order Endpoints</h2>
+      </div>
+
+      <h3>1. Create Order</h3>
+      <div class="endpoint">
+        <p><span class="method-post">POST</span> <code>/orders</code></p>
+        <p><span class="badge badge-auth">REQUIRES AUTH</span></p>
+        <p>Create a new order for purchasing courses.</p>
+      </div>
+
+      <h4>Request Body</h4>
+      <div class="request-body">
+        <pre><code>{
+  "items": [
+    {"courseId": "607f1f77bcf86cd799439015"},
+    {"courseId": "607f1f77bcf86cd799439016"}
+  ],
+  "paymentMethod": "bank_transfer"
+}</code></pre>
+      </div>
+
+      <h3>2. Get My Orders</h3>
+      <div class="endpoint">
+        <p>
+          <span class="method-get">GET</span> <code>/orders/my-orders</code>
+        </p>
+        <p><span class="badge badge-auth">REQUIRES AUTH</span></p>
+        <p>Get all orders of the current user.</p>
+      </div>
+
+      <h3>3. Cancel Order</h3>
+      <div class="endpoint">
+        <p>
+          <span class="method-put">PUT</span> <code>/orders/:id/cancel</code>
+        </p>
+        <p><span class="badge badge-auth">REQUIRES AUTH</span></p>
+        <p>Cancel a pending order.</p>
+      </div>
+
+      <h3>4. Mark Order as Paid (Admin Only)</h3>
+      <div class="endpoint">
+        <p><span class="method-put">PUT</span> <code>/orders/:id/pay</code></p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Mark an order as paid and create enrollments.</p>
+      </div>
+
+      <h4>Request Body</h4>
+      <div class="request-body">
+        <pre><code>{
+  "transactionId": "TXN123456789"
+}</code></pre>
+      </div>
+
+      <!-- Enrollment Endpoints -->
+      <div class="page-break"></div>
+      <div class="section-header">
+        <h2 id="enrollment-endpoints">📖 Enrollment Endpoints</h2>
+      </div>
+
+      <h3>1. Get My Courses</h3>
+      <div class="endpoint">
+        <p>
+          <span class="method-get">GET</span>
+          <code>/enrollments/my-courses</code>
+        </p>
+        <p><span class="badge badge-auth">REQUIRES AUTH</span></p>
+        <p>Get all courses the user is enrolled in.</p>
+      </div>
+
+      <h3>2. Get Course Progress</h3>
+      <div class="endpoint">
+        <p>
+          <span class="method-get">GET</span>
+          <code>/enrollments/:courseId/progress</code>
+        </p>
+        <p><span class="badge badge-auth">REQUIRES AUTH</span></p>
+        <p>Get learning progress for a specific course.</p>
+      </div>
+
+      <h3>3. Revoke Enrollment (Admin Only)</h3>
+      <div class="endpoint">
+        <p>
+          <span class="method-patch">PATCH</span>
+          <code>/enrollments/:id/revoke</code>
+        </p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Remove a student's access to a course.</p>
+      </div>
+
+      <h3>4. Get Course Students (Admin Only)</h3>
+      <div class="endpoint">
+        <p>
+          <span class="method-get">GET</span>
+          <code>/enrollments/course/:courseId/students</code>
+        </p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Get list of students enrolled in a course.</p>
+      </div>
+
+      <!-- Chapter Endpoints -->
+      <div class="page-break"></div>
+      <div class="section-header">
+        <h2 id="chapter-endpoints">📚 Chapter Endpoints</h2>
+      </div>
+
+      <h3>1. Get Course Chapters</h3>
+      <div class="endpoint">
+        <p>
+          <span class="method-get">GET</span>
+          <code>/courses/:courseId/chapters</code>
+        </p>
+        <p><span class="badge badge-public">PUBLIC</span></p>
+        <p>Get all chapters in a course.</p>
+      </div>
+
+      <h3>2. Create Chapter (Admin Only)</h3>
+      <div class="endpoint">
+        <p>
+          <span class="method-post">POST</span> <code>/chapters/:courseId</code>
+        </p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Create a new chapter in a course.</p>
+      </div>
+
+      <h3>3. Update Chapter (Admin Only)</h3>
+      <div class="endpoint">
+        <p><span class="method-put">PUT</span> <code>/chapters/:id</code></p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Update chapter information.</p>
+      </div>
+
+      <h3>4. Reorder Chapters (Admin Only)</h3>
+      <div class="endpoint">
+        <p>
+          <span class="method-put">PUT</span> <code>/chapters/reorder</code>
+        </p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Change the order of chapters in a course.</p>
+      </div>
+
+      <h3>5. Delete Chapter (Admin Only)</h3>
+      <div class="endpoint">
+        <p>
+          <span class="method-delete">DELETE</span> <code>/chapters/:id</code>
+        </p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Delete a chapter and its lessons.</p>
+      </div>
+
+      <!-- Lesson Endpoints -->
+      <div class="page-break"></div>
+      <div class="section-header">
+        <h2 id="lesson-endpoints">🎓 Lesson Endpoints</h2>
+      </div>
+
+      <h3>1. Get Chapter Lessons</h3>
+      <div class="endpoint">
+        <p>
+          <span class="method-get">GET</span>
+          <code>/lessons/chapter/:chapterId</code>
+        </p>
+        <p><span class="badge badge-public">PUBLIC</span></p>
+        <p>Get all lessons in a chapter.</p>
+      </div>
+
+      <h3>2. Get Lesson Details</h3>
+      <div class="endpoint">
+        <p>
+          <span class="method-get">GET</span> <code>/lessons/:lessonId</code>
+        </p>
+        <p><span class="badge badge-auth">REQUIRES AUTH</span></p>
+        <p>Get a specific lesson (requires enrollment).</p>
+      </div>
+
+      <h3>3. Create Lesson (Admin Only)</h3>
+      <div class="endpoint">
+        <p>
+          <span class="method-post">POST</span>
+          <code>/lessons/chapter/:chapterId</code>
+        </p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Create a new lesson in a chapter.</p>
+      </div>
+
+      <h4>Request Body</h4>
+      <div class="request-body">
+        <pre><code>{
+  "title": "Lesson 8: Tactical Combinations",
+  "content": "Learn common tactical combinations...",
+  "videoUrl": "https://youtube.com/watch?v=yyy",
+  "duration": 30
+}</code></pre>
+      </div>
+
+      <h3>4. Update Lesson (Admin Only)</h3>
+      <div class="endpoint">
+        <p><span class="method-put">PUT</span> <code>/lessons/:id</code></p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Update lesson information.</p>
+      </div>
+
+      <h3>5. Reorder Lessons (Admin Only)</h3>
+      <div class="endpoint">
+        <p><span class="method-put">PUT</span> <code>/lessons/reorder</code></p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Change the order of lessons in a chapter.</p>
+      </div>
+
+      <h3>6. Delete Lesson (Admin Only)</h3>
+      <div class="endpoint">
+        <p>
+          <span class="method-delete">DELETE</span> <code>/lessons/:id</code>
+        </p>
+        <p>
+          <span class="badge badge-auth">REQUIRES AUTH</span>
+          <span class="badge badge-admin">ADMIN</span>
+        </p>
+        <p>Delete a lesson from a chapter.</p>
+      </div>
+
+      <!-- Roles & Permissions -->
+      <div class="page-break"></div>
+      <h1 id="roles-permissions">🎯 User Roles & Permissions</h1>
+      <table>
+        <tr>
+          <th>Action</th>
+          <th>Admin</th>
+          <th>Teacher</th>
+          <th>Parent</th>
+        </tr>
+        <tr>
+          <td>View profile</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td>Update own profile</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td>Change password</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td>Create/Edit courses</td>
+          <td>✅</td>
+          <td>❌</td>
+          <td>❌</td>
+        </tr>
+        <tr>
+          <td>Create/Edit chapters</td>
+          <td>✅</td>
+          <td>❌</td>
+          <td>❌</td>
+        </tr>
+        <tr>
+          <td>Create/Edit lessons</td>
+          <td>✅</td>
+          <td>❌</td>
+          <td>❌</td>
+        </tr>
+        <tr>
+          <td>Manage users</td>
+          <td>✅</td>
+          <td>❌</td>
+          <td>❌</td>
+        </tr>
+        <tr>
+          <td>View enrollments</td>
+          <td>✅</td>
+          <td>❌</td>
+          <td>❌</td>
+        </tr>
+        <tr>
+          <td>Purchase courses</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td>View enrolled courses</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td>Track progress</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>✅</td>
+        </tr>
+      </table>
+
+      <!-- Validation Rules -->
+      <div class="page-break"></div>
+      <h1 id="validation-rules">📝 Validation Rules</h1>
+
+      <h3>Username</h3>
+      <ul>
+        <li>Minimum length: 3 characters</li>
+        <li>Maximum length: 50 characters</li>
+        <li>Unique in database</li>
+        <li>Alphanumeric and underscore allowed</li>
+      </ul>
+
+      <h3>Email</h3>
+      <ul>
+        <li>Must be valid email format</li>
+        <li>Unique in database</li>
+        <li>Lowercase converted</li>
+      </ul>
+
+      <h3>Phone</h3>
+      <ul>
+        <li>Format: Vietnamese (0 followed by 9-10 digits)</li>
+        <li>Unique in database</li>
+        <li>Example: <code>0987654321</code></li>
+      </ul>
+
+      <h3>Password</h3>
+      <ul>
+        <li>Minimum length: 6 characters</li>
+        <li>Stored as bcrypt hash</li>
+        <li>Never returned in responses</li>
+      </ul>
+
+      <h3>Course Price</h3>
+      <ul>
+        <li>Must be >= 0</li>
+        <li>Sale price must be <= original price</li>
+      </ul>
+
+      <h3>Enrollment Progress</h3>
+      <ul>
+        <li>Range: 0-100 (percentage)</li>
+        <li>Automatically calculated from completed lessons</li>
+      </ul>
+
+      <!-- Footer -->
+      <div class="page-break"></div>
+      <div
+        style="
+          text-align: center;
+          padding: 40px 0;
+          border-top: 2px solid #2563eb;
+          margin-top: 40px;
+        "
+      >
+        <h3>LMS API Documentation</h3>
+        <p><strong>Version:</strong> 1.0.0</p>
+        <p><strong>Last Updated:</strong> February 2026</p>
+        <p><strong>Project:</strong> BezChess Learning Management System</p>
+        <p style="margin-top: 20px; color: #999">
+          For more information, visit:
+          <code>http://localhost:5000/api-docs</code>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
